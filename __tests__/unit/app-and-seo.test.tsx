@@ -12,11 +12,12 @@ import { cn } from '@/lib/utils';
 import { generateJsonLd, generateToolMetadata } from '@/lib/seo';
 import toolConfig from '@/tool/tool.config';
 import { getPublicSiteUrl, templateMetadata } from '@/tool/template-metadata';
-import { notepadTool } from '@/tool/tool-definition';
+import { markdownTableTool } from '@/tool/tool-definition';
 import { ToolCanvas } from '@/tool/components/tool-canvas';
 import { ToolSidebar } from '@/tool/components/tool-sidebar';
 import { ToolToolbar } from '@/tool/components/tool-toolbar';
-import type { ExporterLoader } from '@itsjust/core';
+import { deriveTable } from '@/tool/lib/derive';
+import { initialMarkdownTableState } from '@/tool/tool-definition';
 
 vi.mock('next/link', () => ({
   default: ({ href, children, ...props }: { href: string; children: ReactNode }) => (
@@ -89,43 +90,83 @@ describe('app and seo', () => {
     expect(document.querySelector('script[type="application/ld+json"]')).toBeInTheDocument();
   });
 
-  it('covers tool definition and helper exports', async () => {
+  it('covers tool definition and helper exports', () => {
     expect(cn('a', undefined, 'b', false, null, 'c')).toBe('a b c');
     expect(getPublicSiteUrl()).toBe('http://localhost:3000');
-    expect(notepadTool.deserialize({ text: 'x' })).toEqual({
-      success: true,
-      data: { text: 'x' },
-    });
-    expect(notepadTool.deserialize({ nope: true })).toEqual({
+
+    expect(markdownTableTool.deserialize({ input: 'a,b' }).success).toBe(true);
+    expect(markdownTableTool.deserialize({ nope: true })).toEqual({
       success: false,
-      error: 'Invalid data format: expected { text: string, title?: string }',
+      error:
+        'Invalid data format: expected { input: string, format?: "auto" | "csv" | "tsv" | "json", alignment?: "left" | "center" | "right", ... }',
     });
-    expect(notepadTool.serialize({ text: 'x' })).toContain('"text": "x"');
-    expect(notepadTool.deserialize({ text: 'x', title: 'My Note' })).toEqual({
-      success: true,
-      data: { text: 'x', title: 'My Note' },
-    });
-    const exporters = notepadTool.exporters ?? [];
-    expect(exporters).toHaveLength(4);
-    const first = exporters[0];
-    expect(first).toBeDefined();
-    if (!first) throw new Error('missing exporter');
-    const png = await (first.loader as ExporterLoader)();
-    const resolved = 'default' in png ? png.default : png.exporter;
-    expect(resolved.format).toBe('png');
+    expect(markdownTableTool.serialize({ ...initialMarkdownTableState, input: 'a,b' })).toContain(
+      '"input": "a,b"'
+    );
   });
 
   it('renders tool components', () => {
+    const derived = deriveTable(initialMarkdownTableState);
+
     render(
       <>
-        <ToolToolbar />
-        <ToolSidebar text="Hello world" fontSize={16} onFontSizeChange={() => {}} />
-        <ToolCanvas text="" fontSize={16} />
+        <ToolToolbar
+          format="auto"
+          onFormatChange={() => {}}
+          viewMode="split"
+          onViewModeChange={() => {}}
+          alignment="left"
+          onAlignmentChange={() => {}}
+          canCopy
+          onCopy={() => {}}
+          onDownloadMarkdown={() => {}}
+          onDownloadHtml={() => {}}
+          onClear={() => {}}
+        />
+        <ToolSidebar
+          headers={derived.headers}
+          columnAlignments={[]}
+          defaultAlignment="left"
+          onColumnAlignmentChange={() => {}}
+          onClearColumnAlignments={() => {}}
+          padding={1}
+          onPaddingChange={() => {}}
+          alignColumns
+          onAlignColumnsChange={() => {}}
+          escapePipes
+          onEscapePipesChange={() => {}}
+          flattenNewlines
+          onFlattenNewlinesChange={() => {}}
+          trimCells
+          onTrimCellsChange={() => {}}
+          uppercaseHeaders={false}
+          onUppercaseHeadersChange={() => {}}
+          includeHeader
+          onIncludeHeaderChange={() => {}}
+          hasHeaderRow
+          onHasHeaderRowChange={() => {}}
+          sampleId="people-csv"
+          onLoadSample={() => {}}
+          overrideCount={0}
+        />
+        <ToolCanvas
+          value={initialMarkdownTableState.input}
+          onChange={() => {}}
+          derived={derived}
+          viewMode="split"
+          sortColumn={null}
+          sortDirection={null}
+          onSortColumn={() => {}}
+          alignments={derived.headers.map(() => 'left')}
+        />
       </>
     );
 
-    expect(screen.getByRole('link', { name: 'Open help page' })).toBeInTheDocument();
-    expect(screen.getByText('11')).toBeInTheDocument(); // char count for "Hello world"
-    expect(screen.getByRole('application', { name: 'Notepad canvas' })).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Output actions' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /People \(CSV\)/ })).toBeInTheDocument();
+    expect(
+      screen.getByRole('application', { name: 'Markdown table converter canvas' })
+    ).toBeInTheDocument();
+    expect(screen.getByRole('table')).toBeInTheDocument();
   });
 });

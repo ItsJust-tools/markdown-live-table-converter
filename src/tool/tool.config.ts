@@ -4,10 +4,11 @@ import packageJson from '../../package.json';
 export const templateBaseVersion = packageJson.version;
 
 const toolConfig = {
-  id: 'simple-notepad',
-  name: 'Notepad',
-  description: 'A clean, distraction-free notepad. Write, edit, and export your notes instantly.',
-  version: '1.3.0',
+  id: 'markdown-table-converter',
+  name: 'Markdown Live Table Converter',
+  description:
+    'Paste CSV, TSV, or JSON and get a clean, aligned Markdown table instantly — with live sorting, per-column alignment, padding controls, and HTML export.',
+  version: '1.0.0',
   exportFormats: ['json', 'png', 'jpeg', 'webp', 'pdf'],
   features: {
     export: true,
@@ -18,17 +19,46 @@ const toolConfig = {
     darkMode: true,
   },
   theme: {
-    accent: '#10b981',
-    accentHover: '#059669',
-    accentSubtle: 'rgba(16, 185, 129, 0.08)',
-    brand: 'Notepad',
-    icon: '\u{1F4DD}',
+    accent: '#0ea5e9',
+    accentHover: '#0284c7',
+    accentSubtle: 'rgba(14, 165, 233, 0.08)',
+    brand: 'Markdown Table',
+    icon: '\u{1F4CB}',
   },
   shortcuts: [
     {
-      title: 'Notepad',
+      title: 'Formatting',
       shortcuts: [
-        { keys: 'Ctrl+Shift+E', label: 'Export All', description: 'exports all formats at once' },
+        {
+          label: 'Copy Markdown',
+          keys: 'Mod+Shift+C',
+          description: 'Copy the generated Markdown table to the clipboard',
+        },
+        {
+          label: 'Toggle padded columns',
+          keys: 'Mod+Shift+P',
+          description: 'Switch between width-aligned and compact output',
+        },
+        {
+          label: 'Cycle alignment',
+          keys: 'Mod+Shift+A',
+          description: 'Cycle the default column alignment',
+        },
+      ],
+    },
+    {
+      title: 'Data',
+      shortcuts: [
+        {
+          label: 'Load sample data',
+          keys: 'Mod+Shift+L',
+          description: 'Load the current sample preset into the input',
+        },
+        {
+          label: 'Clear input',
+          keys: 'Mod+Shift+X',
+          description: 'Clear the pasted data and the preview',
+        },
       ],
     },
   ],

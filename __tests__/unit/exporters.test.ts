@@ -124,7 +124,7 @@ describe('exporters', () => {
     it('renders image via html-to-image with correct options', async () => {
       const wrapper = document.createElement('div');
       const el = document.createElement('div');
-      el.className = 'notepad-canvas';
+      el.className = 'mtc-canvas';
       Object.defineProperty(el, 'offsetWidth', { value: 300, writable: true });
       wrapper.appendChild(el);
       document.body.appendChild(wrapper);
@@ -156,7 +156,7 @@ describe('exporters', () => {
 
     it('expands textarea to capture full scrolled content', async () => {
       const container = document.createElement('div');
-      container.className = 'notepad-canvas';
+      container.className = 'mtc-canvas';
       Object.defineProperty(container, 'offsetWidth', { value: 300, writable: true });
 
       const textarea = document.createElement('textarea');
@@ -189,7 +189,7 @@ describe('exporters', () => {
     it('inlines computed background color on the element', async () => {
       const wrapper = document.createElement('div');
       const el = document.createElement('div');
-      el.className = 'notepad-canvas';
+      el.className = 'mtc-canvas';
       Object.defineProperty(el, 'offsetWidth', { value: 300, writable: true });
       // Simulate a dark-theme background
       el.style.backgroundColor = 'rgb(28, 34, 51)';
@@ -240,7 +240,7 @@ describe('exporters', () => {
 
     it('throws when blob creation returns null', async () => {
       const el = document.createElement('div');
-      el.className = 'notepad-canvas';
+      el.className = 'mtc-canvas';
       Object.defineProperty(el, 'offsetWidth', { value: 300, writable: true });
       document.body.appendChild(el);
 
@@ -253,7 +253,7 @@ describe('exporters', () => {
 
     it('throws when image loading fails', async () => {
       const el = document.createElement('div');
-      el.className = 'notepad-canvas';
+      el.className = 'mtc-canvas';
       Object.defineProperty(el, 'offsetWidth', { value: 300, writable: true });
       document.body.appendChild(el);
 
@@ -288,7 +288,7 @@ describe('exporters', () => {
     it('restores DOM position even when export fails', async () => {
       const wrapper = document.createElement('div');
       const el = document.createElement('div');
-      el.className = 'notepad-canvas';
+      el.className = 'mtc-canvas';
       Object.defineProperty(el, 'offsetWidth', { value: 300, writable: true });
       wrapper.appendChild(el);
       document.body.appendChild(wrapper);
@@ -305,7 +305,7 @@ describe('exporters', () => {
 
     it('restores original styles even when export fails', async () => {
       const el = document.createElement('div');
-      el.className = 'notepad-canvas';
+      el.className = 'mtc-canvas';
       el.style.overflow = 'auto';
       el.style.height = '500px';
       Object.defineProperty(el, 'offsetWidth', { value: 300, writable: true });
@@ -331,7 +331,7 @@ describe('exporters', () => {
 
     it('does not check abort after toBlob resolves', async () => {
       const el = document.createElement('div');
-      el.className = 'notepad-canvas';
+      el.className = 'mtc-canvas';
       Object.defineProperty(el, 'offsetWidth', { value: 300, writable: true });
       document.body.appendChild(el);
 
@@ -354,7 +354,7 @@ describe('exporters', () => {
 
     it('uses default pixel ratio of 2 when scale is not provided', async () => {
       const el = document.createElement('div');
-      el.className = 'notepad-canvas';
+      el.className = 'mtc-canvas';
       Object.defineProperty(el, 'offsetWidth', { value: 300, writable: true });
       document.body.appendChild(el);
 
@@ -375,7 +375,7 @@ describe('exporters', () => {
 
     it('exports empty textarea without error', async () => {
       const container = document.createElement('div');
-      container.className = 'notepad-canvas';
+      container.className = 'mtc-canvas';
       Object.defineProperty(container, 'offsetWidth', { value: 300, writable: true });
 
       const textarea = document.createElement('textarea');
@@ -399,7 +399,7 @@ describe('exporters', () => {
 
     it('handles textarea with special characters', async () => {
       const container = document.createElement('div');
-      container.className = 'notepad-canvas';
+      container.className = 'mtc-canvas';
       Object.defineProperty(container, 'offsetWidth', { value: 300, writable: true });
 
       const textarea = document.createElement('textarea');
@@ -448,7 +448,7 @@ describe('exporters', () => {
   describe('createCanvasExporter', () => {
     it('creates image exporter success and failure results', async () => {
       const el = document.createElement('div');
-      el.className = 'notepad-canvas';
+      el.className = 'mtc-canvas';
 
       toBlobMock.mockResolvedValue(new Blob(['fake-image'], { type: 'image/png' }));
 
@@ -478,7 +478,7 @@ describe('exporters', () => {
 
     it('passes format-specific mime type and quality to canvas toBlob', async () => {
       const el = document.createElement('div');
-      el.className = 'notepad-canvas';
+      el.className = 'mtc-canvas';
 
       toBlobMock.mockResolvedValue(new Blob(['fake-image'], { type: 'image/png' }));
 
@@ -503,7 +503,7 @@ describe('exporters', () => {
 
     it('uses default filename with timestamp when none provided', async () => {
       const el = document.createElement('div');
-      el.className = 'notepad-canvas';
+      el.className = 'mtc-canvas';
 
       toBlobMock.mockResolvedValue(new Blob(['fake-image'], { type: 'image/png' }));
 
@@ -520,7 +520,7 @@ describe('exporters', () => {
 
     it('produces correct ExportResult shape on success', async () => {
       const el = document.createElement('div');
-      el.className = 'notepad-canvas';
+      el.className = 'mtc-canvas';
 
       toBlobMock.mockResolvedValue(new Blob(['fake-image'], { type: 'image/png' }));
 
@@ -546,7 +546,7 @@ describe('exporters', () => {
 
     it('produces correct ExportResult shape on failure', async () => {
       const el = document.createElement('div');
-      el.className = 'notepad-canvas';
+      el.className = 'mtc-canvas';
 
       toBlobMock.mockResolvedValue(null);
 
